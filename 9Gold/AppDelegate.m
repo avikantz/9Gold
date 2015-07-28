@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "SSZipArchive.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,15 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	// Override point for customization after application launch.
+	
+	if (![[NSUserDefaults standardUserDefaults] boolForKey:@"Launched"]) {
+		NSString *path = [[NSBundle mainBundle] pathForResource:@"Init" ofType:@"zip"];
+		[SSZipArchive unzipFileAtPath:path toDestination:[self documentsPathForFileName:@"Default/"]];
+		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"Launched"];
+	}
+	
+	[[NSFileManager defaultManager] createDirectoryAtPath:[self documentsPathForFileName:@"Favs/"] withIntermediateDirectories:YES attributes:nil error:nil];
+	
 	return YES;
 }
 
@@ -42,6 +52,12 @@
 	// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 	// Saves changes in the application's managed object context before the application terminates.
 	[self saveContext];
+}
+
+- (NSString *)documentsPathForFileName:(NSString *)name {
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsPath = [paths objectAtIndex:0];
+	return [documentsPath stringByAppendingPathComponent:name];
 }
 
 #pragma mark - Core Data stack
