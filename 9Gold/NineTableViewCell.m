@@ -20,7 +20,4 @@
     // Configure the view for the selected state
 }
 
-- (IBAction)buttonPressed:(id)sender {
-	_favButton.imageView.image = [UIImage imageNamed:@"checkbox"];
-}
 @end

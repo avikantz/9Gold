@@ -23,6 +23,9 @@
 	BOOL showingFavs;
 	
 	NSString *currentFolderPath;
+	
+	UILongPressGestureRecognizer *longPressGesture;
+	UIImage *imageToShare;
 }
 
 - (void)viewDidLoad {
@@ -44,44 +47,22 @@
 			[_Images addObject:[NSString stringWithFormat:@"%@/%@", currentFolderPath, item]];
 	}
 	
-//	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//	if ([defaults objectForKey:@"fax"])
-//		_Favs = [NSMutableArray arrayWithArray:[defaults objectForKey:@"fax"]];
-//	else
-		_Favs = [[NSMutableArray alloc] init];
+	_Favs = [[NSMutableArray alloc] init];
 	items = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[self documentsPathForFileName:@"Favs/"] error:nil];
 	for (NSString *item in items) {
 		if ([item containsString:@".jpg"])
 			[_Favs addObject:[item lastPathComponent]];
 	}
+	
+	longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(LongPressCell:)];
+	[longPressGesture setNumberOfTouchesRequired:1];
+	[longPressGesture setMinimumPressDuration:0.8f];
+	[self.tableView addGestureRecognizer:longPressGesture];
 }
 
 - (void)didReceiveMemoryWarning {
 	[super didReceiveMemoryWarning];
 	// Dispose of any resources that can be recreated.
-}
-
-- (IBAction)favsButtonPressed:(id)sender {
-//	showingFavs = !showingFavs;
-//	if (showingFavs) {
-//		self.title = @"Favourites";
-//		NSArray *items = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[self documentsPathForFileName:@"Favs/"] error:nil];
-//		_Images = [[NSMutableArray alloc] init];
-//		for (NSString *item in items) {
-//			if ([item containsString:@".jpg"])
-//				[_Images addObject:[self documentsPathForFileName:item]];
-//		}
-//	}
-//	else {
-//		self.title = @"Home";
-//		NSArray *items = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:currentFolderPath error:nil];
-//		_Images = [[NSMutableArray alloc] init];
-//		for (NSString *item in items) {
-//			if ([item containsString:@".jpg"])
-//				[_Images addObject:[self documentsPathForFileName:item]];
-//		}
-//	}
-//	[_tableView reloadData];
 }
 
 -(void)didPickFolderWithName:(NSString *)name andPath:(NSString *)path {
@@ -97,6 +78,7 @@
 	if ([name isEqualToString:@"Favs"])
 		showingFavs = YES;
 	[_tableView reloadData];
+	[_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
 }
 
 - (NSString *)documentsPathForFileName:(NSString *)name {
@@ -112,8 +94,6 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//	if (showingFavs)
-//		return _Favs.count;
 	return _Images.count;
 }
 
@@ -141,7 +121,7 @@
 	[favButton addTarget:self action:@selector(tableViewDidClickOnFavsButton:) forControlEvents:UIControlEventTouchUpInside];
 	
 	if ([_Favs containsObject:[imagePath lastPathComponent]])
-		[cell.favButton setImage:[UIImage imageNamed:@"checkbox"] forState:UIControlStateNormal];
+		[cell.favButton setImage:[UIImage imageNamed:@"favs"] forState:UIControlStateNormal];
 	else
 		[cell.favButton setImage:[UIImage imageNamed:@"checkboxEmpty"] forState:UIControlStateNormal];
 	
@@ -193,7 +173,29 @@
 		}
 		[_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 	}
-//	[[NSUserDefaults standardUserDefaults] setObject:_Favs forKey:@"fax"];
+}
+
+-(void)LongPressCell :(UILongPressGestureRecognizer *)recognizer {
+	CGPoint pointOfContact = [recognizer locationInView:self.tableView];
+	NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:pointOfContact];
+	imageToShare = [UIImage imageWithContentsOfFile:[_Images objectAtIndex:indexPath.row]];
+	if (indexPath == nil) {
+		// Long press not on a row...
+	}
+	else if (recognizer.state == UIGestureRecognizerStateBegan) {
+		// Long press recognized on indexPath.row
+		UIActivityViewController *ShareAVC = [[UIActivityViewController alloc] initWithActivityItems:
+											  @[imageToShare] applicationActivities:nil];
+		if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+			UIPopoverController *popup = [[UIPopoverController alloc] initWithContentViewController:ShareAVC];
+			[popup presentPopoverFromRect:_tableView.frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionUnknown animated:YES];
+		}
+		else
+			[self presentViewController:ShareAVC animated:TRUE completion:nil];
+	}
+	else {
+		// Recognizer didn't recognize the gesture
+	}
 }
 
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {

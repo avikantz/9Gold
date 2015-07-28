@@ -8,6 +8,9 @@
 
 #import "PickerTableViewController.h"
 
+#define SWidth self.view.frame.size.width
+#define SHeight self.view.frame.size.height
+
 @interface PickerTableViewController ()
 
 @end
@@ -19,15 +22,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
-	
+	[self.tableView setContentOffset:CGPointMake(0, -44.f) animated:YES];
 	
 	NSArray *items = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[self documentsPathForFileName:@""] error:nil];
 	pickerArray = [[NSMutableArray alloc] init];
+	NSString *favItem = @"";
 	for (NSString *item in items) {
-		if (![[item lastPathComponent] containsString:@"."])
+		if (![[item lastPathComponent] containsString:@"."]) {
 			[pickerArray addObject:[self documentsPathForFileName:item]];
+			if ([item containsString:@"Favs"])
+				favItem = [self documentsPathForFileName:item];
+		}
 	}
 	
+	[pickerArray sortUsingSelector:@selector(caseInsensitiveCompare:)];
+	
+	[pickerArray removeObject:favItem];
+	[pickerArray insertObject:favItem atIndex:0];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -60,7 +71,7 @@
 	NSString *path = [pickerArray objectAtIndex:indexPath.row];
 	cell.textLabel.text = [path lastPathComponent];
 	
-	if ([cell.textLabel.text isEqualToString:@"Favs"])
+	if ([cell.textLabel.text containsString:@"Favs"])
 		cell.imageView.image = [UIImage imageNamed:@"favs"];
 	else
 		cell.imageView.image = [UIImage imageNamed:@"folder"];

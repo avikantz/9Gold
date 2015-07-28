@@ -89,8 +89,8 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Expand..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="puT-4D-BHY">
-                                                    <rect key="frame" x="265" y="250" width="70" height="21"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                    <rect key="frame" x="261" y="249" width="79" height="23"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="19"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -228,7 +228,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="checkboxEmpty" width="50" height="50"/>
+        <image name="checkboxEmpty" width="44" height="44"/>
         <image name="expand" width="640" height="120"/>
         <image name="folder" width="40" height="40"/>
         <image name="separator" width="640" height="32"/>

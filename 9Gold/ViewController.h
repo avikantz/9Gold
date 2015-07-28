@@ -18,7 +18,5 @@
 
 @property (strong, nonatomic) NSIndexPath *selectedIndexPath;
 
-- (IBAction)favsButtonPressed:(id)sender;
-
 @end
 
