@@ -8,11 +8,11 @@
         <!--Pick a Folder-->
         <scene sceneID="Ur2-Az-0zp">
             <objects>
-                <tableViewController id="l2p-6Y-oBB" customClass="PickerTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="mmV-BK-j3V">
+                <tableViewController storyboardIdentifier="picker" useStoryboardIdentifierAsRestorationIdentifier="YES" id="l2p-6Y-oBB" customClass="PickerTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="mmV-BK-j3V">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="pickerCell" textLabel="zbl-VU-Tbl" detailTextLabel="h5v-1w-mu1" imageView="tu4-VF-GCB" style="IBUITableViewCellStyleValue1" id="aLt-qD-PUq">
                                 <autoresizingMask key="autoresizingMask"/>
@@ -22,8 +22,8 @@
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zbl-VU-Tbl">
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <nil key="highlightedColor"/>
+                                            <color key="textColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="highlightedColor" cocoaTouchSystemColor="darkTextColor"/>
                                         </label>
                                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="folder" id="tu4-VF-GCB">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -35,7 +35,9 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </tableViewCellContentView>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -47,7 +49,7 @@
                         <barButtonItem key="rightBarButtonItem" title="Done" id="VfQ-gw-tNv"/>
                     </navigationItem>
                     <nil key="simulatedStatusBarMetrics"/>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ebq-YO-unB" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -190,7 +192,12 @@
                         <barButtonItem key="backBarButtonItem" title=" " id="ihJ-jp-dsY"/>
                         <barButtonItem key="leftBarButtonItem" systemItem="organize" id="asx-p2-dkr">
                             <connections>
-                                <segue destination="l2p-6Y-oBB" kind="presentation" identifier="picker" id="WX2-pP-8Oe"/>
+                                <segue destination="l2p-6Y-oBB" kind="custom" identifier="picker" customClass="AFBlurSegue" id="WX2-pP-8Oe"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="shuffle" id="s5T-wZ-dYt">
+                            <connections>
+                                <action selector="shuffleArray:" destination="BYZ-38-t0r" id="OOp-l3-Xrl"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -200,7 +207,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1029" y="1022"/>
+            <point key="canvasLocation" x="1029" y="1051"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="x4A-Ni-HAq">
@@ -224,7 +231,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s2i-nI-KlM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="340" y="1023"/>
+            <point key="canvasLocation" x="334" y="1051"/>
         </scene>
     </scenes>
     <resources>
@@ -232,5 +239,6 @@
         <image name="expand" width="640" height="120"/>
         <image name="folder" width="40" height="40"/>
         <image name="separator" width="640" height="32"/>
+        <image name="shuffle" width="30" height="30"/>
     </resources>
 </document>

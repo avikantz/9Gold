@@ -9,26 +9,10 @@
         <view contentMode="scaleToFill" id="iN0-l3-epB">
             <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <subviews>
-                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="iTunesArtwork" translatesAutoresizingMaskIntoConstraints="NO" id="loM-l0-GwT">
-                    <rect key="frame" x="111" y="111" width="258" height="258"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="258" id="6c5-Z3-B6c"/>
-                        <constraint firstAttribute="height" constant="258" id="OzS-DC-gKK"/>
-                    </constraints>
-                </imageView>
-            </subviews>
-            <color key="backgroundColor" red="0.89942239133415613" green="0.73092691622103378" blue="0.046634294014808619" alpha="1" colorSpace="calibratedRGB"/>
-            <constraints>
-                <constraint firstAttribute="centerY" secondItem="loM-l0-GwT" secondAttribute="centerY" id="KLa-Sz-sQa"/>
-                <constraint firstAttribute="centerX" secondItem="loM-l0-GwT" secondAttribute="centerX" id="rHe-Bl-WT9"/>
-            </constraints>
+            <color key="backgroundColor" red="0.88207645599790208" green="0.7328084293314685" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="675" y="455"/>
         </view>
     </objects>
-    <resources>
-        <image name="iTunesArtwork" width="512" height="512"/>
-    </resources>
 </document>

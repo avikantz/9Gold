@@ -7,7 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		59071DD51B689CDF00EB9132 /* TTOpenInAppActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 59071DD41B689CDF00EB9132 /* TTOpenInAppActivity.m */; };
 		593CC2AA1B6741CC00A4BCFF /* PickerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 593CC2A91B6741CC00A4BCFF /* PickerTableViewController.m */; };
+		593CC2B41B67F15300A4BCFF /* AFBlurSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 593CC2B11B67F15300A4BCFF /* AFBlurSegue.m */; };
+		593CC2B51B67F15300A4BCFF /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 593CC2B31B67F15300A4BCFF /* UIImage+ImageEffects.m */; };
+		5950BE091B68D81B0013843A /* footer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5950BE081B68D81B0013843A /* footer.xib */; };
+		5950BE0B1B68DB0D0013843A /* infoFooter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5950BE0A1B68DB0D0013843A /* infoFooter.xib */; };
 		599C399B1B665210005644F2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 599C399A1B665210005644F2 /* main.m */; };
 		599C399E1B665210005644F2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 599C399D1B665210005644F2 /* AppDelegate.m */; };
 		599C39A11B665210005644F2 /* _Gold.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 599C399F1B665210005644F2 /* _Gold.xcdatamodeld */; };
@@ -37,8 +42,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		59071DD31B689CDF00EB9132 /* TTOpenInAppActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTOpenInAppActivity.h; sourceTree = "<group>"; };
+		59071DD41B689CDF00EB9132 /* TTOpenInAppActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTOpenInAppActivity.m; sourceTree = "<group>"; };
 		593CC2A81B6741CB00A4BCFF /* PickerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PickerTableViewController.h; sourceTree = "<group>"; };
 		593CC2A91B6741CC00A4BCFF /* PickerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PickerTableViewController.m; sourceTree = "<group>"; };
+		593CC2B01B67F15300A4BCFF /* AFBlurSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFBlurSegue.h; sourceTree = "<group>"; };
+		593CC2B11B67F15300A4BCFF /* AFBlurSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFBlurSegue.m; sourceTree = "<group>"; };
+		593CC2B21B67F15300A4BCFF /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
+		593CC2B31B67F15300A4BCFF /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
+		5950BE081B68D81B0013843A /* footer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = footer.xib; sourceTree = "<group>"; };
+		5950BE0A1B68DB0D0013843A /* infoFooter.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = infoFooter.xib; sourceTree = "<group>"; };
 		599C39951B665210005644F2 /* 9Gold.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 9Gold.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		599C39991B665210005644F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		599C399A1B665210005644F2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -89,6 +102,50 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		59071DD21B689CDF00EB9132 /* TTOpenInActivity */ = {
+			isa = PBXGroup;
+			children = (
+				59071DD31B689CDF00EB9132 /* TTOpenInAppActivity.h */,
+				59071DD41B689CDF00EB9132 /* TTOpenInAppActivity.m */,
+			);
+			path = TTOpenInActivity;
+			sourceTree = "<group>";
+		};
+		593CC2AF1B67F15300A4BCFF /* AFBlurSegue */ = {
+			isa = PBXGroup;
+			children = (
+				593CC2B01B67F15300A4BCFF /* AFBlurSegue.h */,
+				593CC2B11B67F15300A4BCFF /* AFBlurSegue.m */,
+				593CC2B21B67F15300A4BCFF /* UIImage+ImageEffects.h */,
+				593CC2B31B67F15300A4BCFF /* UIImage+ImageEffects.m */,
+			);
+			path = AFBlurSegue;
+			sourceTree = "<group>";
+		};
+		5950BE0C1B68E0AC0013843A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				599C39A51B665210005644F2 /* Main.storyboard */,
+				599C39AA1B665210005644F2 /* LaunchScreen.xib */,
+				5950BE081B68D81B0013843A /* footer.xib */,
+				5950BE0A1B68DB0D0013843A /* infoFooter.xib */,
+				599C39C11B665730005644F2 /* NineTableViewCell.h */,
+				599C39C21B665731005644F2 /* NineTableViewCell.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		5950BE0D1B68E0B70013843A /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				599C39A21B665210005644F2 /* ViewController.h */,
+				599C39A31B665210005644F2 /* ViewController.m */,
+				593CC2A81B6741CB00A4BCFF /* PickerTableViewController.h */,
+				593CC2A91B6741CC00A4BCFF /* PickerTableViewController.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
 		599C398C1B665210005644F2 = {
 			isa = PBXGroup;
 			children = (
@@ -113,16 +170,10 @@
 			children = (
 				599C399C1B665210005644F2 /* AppDelegate.h */,
 				599C399D1B665210005644F2 /* AppDelegate.m */,
-				599C39A21B665210005644F2 /* ViewController.h */,
-				599C39A31B665210005644F2 /* ViewController.m */,
-				599C39C11B665730005644F2 /* NineTableViewCell.h */,
-				599C39C21B665731005644F2 /* NineTableViewCell.m */,
-				593CC2A81B6741CB00A4BCFF /* PickerTableViewController.h */,
-				593CC2A91B6741CC00A4BCFF /* PickerTableViewController.m */,
-				599C39A51B665210005644F2 /* Main.storyboard */,
-				599C39A81B665210005644F2 /* Images.xcassets */,
-				599C39AA1B665210005644F2 /* LaunchScreen.xib */,
-				599C399F1B665210005644F2 /* _Gold.xcdatamodeld */,
+				5950BE0D1B68E0B70013843A /* Controllers */,
+				5950BE0C1B68E0AC0013843A /* Views */,
+				59071DD21B689CDF00EB9132 /* TTOpenInActivity */,
+				593CC2AF1B67F15300A4BCFF /* AFBlurSegue */,
 				599C39C41B665FCB005644F2 /* SSZip */,
 				599C39981B665210005644F2 /* Supporting Files */,
 			);
@@ -133,6 +184,8 @@
 			isa = PBXGroup;
 			children = (
 				599C39D81B666019005644F2 /* Init.zip */,
+				599C399F1B665210005644F2 /* _Gold.xcdatamodeld */,
+				599C39A81B665210005644F2 /* Images.xcassets */,
 				599C39991B665210005644F2 /* Info.plist */,
 				599C399A1B665210005644F2 /* main.m */,
 			);
@@ -262,10 +315,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5950BE0B1B68DB0D0013843A /* infoFooter.xib in Resources */,
 				599C39A71B665210005644F2 /* Main.storyboard in Resources */,
 				599C39D91B666019005644F2 /* Init.zip in Resources */,
 				599C39AC1B665210005644F2 /* LaunchScreen.xib in Resources */,
 				599C39A91B665210005644F2 /* Images.xcassets in Resources */,
+				5950BE091B68D81B0013843A /* footer.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,10 +339,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				599C39D11B665FCB005644F2 /* ioapi.c in Sources */,
+				593CC2B51B67F15300A4BCFF /* UIImage+ImageEffects.m in Sources */,
 				593CC2AA1B6741CC00A4BCFF /* PickerTableViewController.m in Sources */,
 				599C399E1B665210005644F2 /* AppDelegate.m in Sources */,
 				599C399B1B665210005644F2 /* main.m in Sources */,
 				599C39D41B665FCB005644F2 /* zip.c in Sources */,
+				593CC2B41B67F15300A4BCFF /* AFBlurSegue.m in Sources */,
+				59071DD51B689CDF00EB9132 /* TTOpenInAppActivity.m in Sources */,
 				599C39C31B665731005644F2 /* NineTableViewCell.m in Sources */,
 				599C39D21B665FCB005644F2 /* mztools.c in Sources */,
 				599C39D51B665FCB005644F2 /* SSZipArchive.m in Sources */,

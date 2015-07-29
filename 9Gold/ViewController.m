@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 #import "NineTableViewCell.h"
+#import "TTOpenInAppActivity.h"
+#import "AFBlurSegue.h"
 
 #define iPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 
@@ -26,6 +28,7 @@
 	
 	UILongPressGestureRecognizer *longPressGesture;
 	UIImage *imageToShare;
+	NSURL *urlToShare;
 }
 
 - (void)viewDidLoad {
@@ -37,8 +40,16 @@
 	_tableView.dataSource = self;
 	_tableView.delegate = self;
 	
-	currentFolderPath = [self documentsPathForFileName:@"Favs/"];
-	self.title = @"9Gold";
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	
+	if ([defaults objectForKey:@"folderPath"]) {
+		currentFolderPath = [self documentsPathForFileName:[defaults objectForKey:@"folderPath"]];
+		self.title = [defaults objectForKey:@"folderPath"];
+	}
+	else {
+		currentFolderPath = [self documentsPathForFileName:@"Favs/"];
+		self.title = @"9Gold";
+	}
 	
 	NSArray *items = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:currentFolderPath error:nil];
 	_Images = [[NSMutableArray alloc] init];
@@ -58,6 +69,17 @@
 	[longPressGesture setNumberOfTouchesRequired:1];
 	[longPressGesture setMinimumPressDuration:0.8f];
 	[self.tableView addGestureRecognizer:longPressGesture];
+	
+	if ([defaults floatForKey:@"scrollOffset"])
+		[_tableView setContentOffset:CGPointMake(0, [defaults floatForKey:@"scrollOffset"]) animated:YES];
+	
+	// Handling scroll offset
+	[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+		CGFloat scrollOffset = [_tableView contentOffset].y;
+		NSString *path = currentFolderPath;
+		[defaults setFloat:scrollOffset forKey:@"scrollOffset"];
+		[defaults setObject:[path lastPathComponent] forKey:@"folderPath"];
+	}];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -87,6 +109,30 @@
 	return [documentsPath stringByAppendingPathComponent:name];
 }
 
+- (IBAction)shuffleArray:(id)sender {
+	NSMutableArray *array = _Images;
+	NSInteger count = (long)[array count];
+	for (NSUInteger i = 0; i < count; ++i) {
+		NSInteger exchangeIndex = arc4random_uniform((int)count);
+		if (i != exchangeIndex) {
+			[array exchangeObjectAtIndex:i withObjectAtIndex:exchangeIndex];
+		}
+	}
+	_Images = array;
+	[UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+		self.tableView.transform = CGAffineTransformMakeTranslation(-self.view.frame.size.width, 0);
+		self.tableView.alpha = 0.f;
+	} completion:^(BOOL finished) {
+		self.tableView.transform = CGAffineTransformMakeTranslation(self.view.frame.size.width, 0);
+		[self.tableView reloadData];
+		[UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+			self.tableView.transform = CGAffineTransformIdentity;
+			self.tableView.alpha = 1.f;
+		} completion:nil];
+	}];
+}
+
+
 #pragma mark - Table view data source and delegates
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -104,12 +150,10 @@
 	
 	UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
 	
-	if ([indexPath compare:_selectedIndexPath] == NSOrderedSame || image.size.height < 720.f) {
+	if ([indexPath compare:_selectedIndexPath] == NSOrderedSame || image.size.height < 1080.f)
 		cell = (NineTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"9Cell2" forIndexPath:indexPath];
-	}
-	else {
+	else
 		cell = (NineTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"9Cell" forIndexPath:indexPath];
-	}
 	
 	if (cell == nil)
 		cell = [tableView dequeueReusableCellWithIdentifier:@"9Cell2" forIndexPath:indexPath];
@@ -131,9 +175,8 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UIImage *image;
 	image = [UIImage imageWithContentsOfFile:[_Images objectAtIndex:indexPath.row]];
-	if ([indexPath compare:_selectedIndexPath] == NSOrderedSame || image.size.height < 720.f) {
+	if ([indexPath compare:_selectedIndexPath] == NSOrderedSame || image.size.height < 1080.f)
 		return (SWidth - (iPad?120:0))*image.size.height/(image.size.width);
-	}
 	return 320.f + (iPad?160:0);
 }
 
@@ -178,20 +221,26 @@
 -(void)LongPressCell :(UILongPressGestureRecognizer *)recognizer {
 	CGPoint pointOfContact = [recognizer locationInView:self.tableView];
 	NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:pointOfContact];
-	imageToShare = [UIImage imageWithContentsOfFile:[_Images objectAtIndex:indexPath.row]];
+	NSString *path = [_Images objectAtIndex:indexPath.row];
+	imageToShare = [UIImage imageWithContentsOfFile:path];
+	urlToShare = [NSURL URLWithString:[NSString stringWithFormat:@"http://9gag.com/gag/%@", [[path lastPathComponent] substringToIndex:7]]];
+	TTOpenInAppActivity *openInAppActivity = [[TTOpenInAppActivity alloc] initWithView:self.view andRect:recognizer.view.frame];
 	if (indexPath == nil) {
 		// Long press not on a row...
 	}
 	else if (recognizer.state == UIGestureRecognizerStateBegan) {
 		// Long press recognized on indexPath.row
 		UIActivityViewController *ShareAVC = [[UIActivityViewController alloc] initWithActivityItems:
-											  @[imageToShare] applicationActivities:nil];
+											  @[imageToShare, urlToShare] applicationActivities:@[openInAppActivity]];
 		if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
 			UIPopoverController *popup = [[UIPopoverController alloc] initWithContentViewController:ShareAVC];
+			openInAppActivity.superViewController = popup;
 			[popup presentPopoverFromRect:_tableView.frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionUnknown animated:YES];
 		}
-		else
+		else {
+			openInAppActivity.superViewController = ShareAVC;
 			[self presentViewController:ShareAVC animated:TRUE completion:nil];
+		}
 	}
 	else {
 		// Recognizer didn't recognize the gesture
@@ -213,6 +262,24 @@
 	if (!showingFavs && ![_Favs containsObject:[path lastPathComponent]])
 		return YES;
 	return NO;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+	UIView *view = [[[NSBundle mainBundle] loadNibNamed:@"infoFooter" owner:self options:nil] objectAtIndex:0];
+	UILabel *textLabel = (UILabel *)[view viewWithTag:1];
+	textLabel.text = [currentFolderPath lastPathComponent];
+	UILabel *detailTextLabel = (UILabel *)[view viewWithTag:2];
+	detailTextLabel.text = [NSString stringWithFormat:@"%li items.", [_Images count]];
+	UIImageView *imageView = (UIImageView *)[view viewWithTag:3];
+	if ([textLabel.text containsString:@"Favs"])
+		imageView.image = [UIImage imageNamed:@"favs"];
+	else
+		imageView.image = [UIImage imageNamed:@"folder"];
+	return view;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+	return 84.f;
 }
 
 #pragma mark - Navigation

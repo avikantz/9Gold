@@ -17,6 +17,7 @@
 
 @implementation PickerTableViewController {
 	NSMutableArray *pickerArray;
+	NSIndexPath *indexPathToDelete;
 }
 
 - (void)viewDidLoad {
@@ -77,22 +78,24 @@
 		cell.imageView.image = [UIImage imageNamed:@"folder"];
 	
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		// download image on global queue
+		// get the attributes of folders on another queue
 		NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
 		__block CGFloat size = 0;
 		[array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 			size += ([[[NSFileManager defaultManager] attributesOfItemAtPath:[path stringByAppendingPathComponent:obj] error:nil] fileSize])/pow(10, 6);
 		}];
-		// save image to documents folder for further use
-		
 		dispatch_async(dispatch_get_main_queue(), ^{
-			// Get the current cell on the main queue and set the image
+			// Get the current cell on the main queue and set the folder attributes
 			UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
 			cell.detailTextLabel.text = [NSString stringWithFormat:@"%li items, %.1f MB", array.count, size];
 		});
 	});
 	
     return cell;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	return 48.f;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -111,12 +114,10 @@
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-		NSString *path = pickerArray[indexPath.row];
-		[pickerArray removeObject:path];
-		NSError *error;
-		[[NSFileManager defaultManager] removeItemAtPath:path error:&error];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+		// set index path of the row, and prompt the user
+		indexPathToDelete = indexPath;
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Confirm Delete?" message:[NSString stringWithFormat:@"This will delete the folder '%@' and all its contents. The action is irreversible. Are you sure you want to continue?", [[pickerArray objectAtIndex:indexPath.row] lastPathComponent]] delegate:self cancelButtonTitle:@"Nope." otherButtonTitles:@"Do it.", nil];
+		[alert show];
     }
 }
 
@@ -124,8 +125,16 @@
 	return 64.f;
 }
 
--(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	return @"Choose a folder";
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+	UIView *view = [[[NSBundle mainBundle] loadNibNamed:@"footer" owner:self options:nil] objectAtIndex:0];
+	UIButton *button = (UIButton *)[view viewWithTag:2];
+	[button addTarget:self action:@selector(dismissViewController) forControlEvents:UIControlEventTouchUpInside];
+	return view;
+}
+
+-(void)dismissViewController {
+	[self dismissViewControllerAnimated:YES completion:^{
+	}];
 }
 
 /*
@@ -141,6 +150,19 @@
     return YES;
 }
 */
+
+#pragma mark - Alert view delegate
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
+	if ([title isEqualToString:@"Do it."]) {
+		NSString *pathToDelete = pickerArray[indexPathToDelete.row];
+		[pickerArray removeObject:pathToDelete];
+		NSError *error;
+		[[NSFileManager defaultManager] removeItemAtPath:pathToDelete error:&error];
+		[self.tableView deleteRowsAtIndexPaths:@[indexPathToDelete] withRowAnimation:UITableViewRowAnimationAutomatic];
+	}
+}
 
 /*
 #pragma mark - Navigation

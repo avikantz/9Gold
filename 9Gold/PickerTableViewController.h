@@ -13,7 +13,7 @@
 -(void)didPickFolderWithName:(NSString *)name andPath:(NSString *)path;
 @end
 
-@interface PickerTableViewController : UITableViewController
+@interface PickerTableViewController : UITableViewController <UIAlertViewDelegate>
 
 @property (weak, nonatomic) id<FolderPickerDelegate> delegate;
 
