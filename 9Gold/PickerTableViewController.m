@@ -7,6 +7,8 @@
 //
 
 #import "PickerTableViewController.h"
+#import "PickerEditerTableViewCell.h"
+#import "AFBlurSegue.h"
 
 #define SWidth self.view.frame.size.width
 #define SHeight self.view.frame.size.height
@@ -18,6 +20,9 @@
 @implementation PickerTableViewController {
 	NSMutableArray *pickerArray;
 	NSIndexPath *indexPathToDelete;
+	
+	UILongPressGestureRecognizer *longPressGesture;
+	NSIndexPath *selectedIndexPath;
 }
 
 - (void)viewDidLoad {
@@ -40,6 +45,15 @@
 	
 	[pickerArray removeObject:favItem];
 	[pickerArray insertObject:favItem atIndex:0];
+	
+	longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(LongPressCell:)];
+	[longPressGesture setNumberOfTouchesRequired:1];
+	[longPressGesture setMinimumPressDuration:1.f];
+	[self.tableView addGestureRecognizer:longPressGesture];
+	selectedIndexPath = nil;
+	
+	[self.refreshControl addTarget:self action:@selector(didFinishFetchingImages) forControlEvents:UIControlEventAllEvents];
+	[self.tableView addSubview:self.refreshControl];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -65,31 +79,44 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"pickerCell" forIndexPath:indexPath];
+	PickerEditerTableViewCell *cell;
+	NSString *path = [pickerArray objectAtIndex:indexPath.row];
+	NSString *folderName = [path lastPathComponent];
+	if ([indexPath isEqual:selectedIndexPath]) {
+		cell = (PickerEditerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"pickerEditorCell" forIndexPath:indexPath];
+		if ([folderName containsString:@"Favs"])
+			cell.editorImageView.image = [UIImage imageNamed:@"favs"];
+		else
+			cell.editorImageView.image = [UIImage imageNamed:@"folder"];
+		cell.editorTextField.text = folderName;
+		cell.editorTextField.delegate = self;
+		[cell.editorTextField becomeFirstResponder];
+	}
+	else {
+		cell = [tableView dequeueReusableCellWithIdentifier:@"pickerCell" forIndexPath:indexPath];
+		cell.textLabel.text = folderName;
+		if ([folderName containsString:@"Favs"])
+			cell.imageView.image = [UIImage imageNamed:@"favs"];
+		else
+			cell.imageView.image = [UIImage imageNamed:@"folder"];
+		
+		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+			// get the attributes of folders on another queue
+			NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
+			__block CGFloat size = 0;
+			[array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+				size += ([[[NSFileManager defaultManager] attributesOfItemAtPath:[path stringByAppendingPathComponent:obj] error:nil] fileSize])/pow(10, 6);
+			}];
+			dispatch_async(dispatch_get_main_queue(), ^{
+				// Get the current cell on the main queue and set the folder attributes
+				UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+				cell.detailTextLabel.text = [NSString stringWithFormat:@"%li items, %.1f MB", array.count, size];
+			});
+		});
+	}
+	
 	if (cell == nil)
 		cell = [tableView dequeueReusableCellWithIdentifier:@"pickerCell"];
-	
-	NSString *path = [pickerArray objectAtIndex:indexPath.row];
-	cell.textLabel.text = [path lastPathComponent];
-	
-	if ([cell.textLabel.text containsString:@"Favs"])
-		cell.imageView.image = [UIImage imageNamed:@"favs"];
-	else
-		cell.imageView.image = [UIImage imageNamed:@"folder"];
-	
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		// get the attributes of folders on another queue
-		NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
-		__block CGFloat size = 0;
-		[array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-			size += ([[[NSFileManager defaultManager] attributesOfItemAtPath:[path stringByAppendingPathComponent:obj] error:nil] fileSize])/pow(10, 6);
-		}];
-		dispatch_async(dispatch_get_main_queue(), ^{
-			// Get the current cell on the main queue and set the folder attributes
-			UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-			cell.detailTextLabel.text = [NSString stringWithFormat:@"%li items, %.1f MB", array.count, size];
-		});
-	});
 	
     return cell;
 }
@@ -122,19 +149,87 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-	return 64.f;
+	return 80.f;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
 	UIView *view = [[[NSBundle mainBundle] loadNibNamed:@"footer" owner:self options:nil] objectAtIndex:0];
 	UIButton *button = (UIButton *)[view viewWithTag:2];
 	[button addTarget:self action:@selector(dismissViewController) forControlEvents:UIControlEventTouchUpInside];
+	UIButton *fetchImagesButton = (UIButton *)[view viewWithTag:3];
+	[fetchImagesButton addTarget:self action:@selector(presentFetchViewController) forControlEvents:UIControlEventTouchUpInside];
 	return view;
 }
+
+#pragma mark - Text field delegates
+
+-(BOOL)textFieldShouldReturn:(nonnull UITextField *)textField {
+	NSString *path = pickerArray[selectedIndexPath.row];
+	NSFileManager *manager = [NSFileManager defaultManager];
+	if ([manager fileExistsAtPath:path]) {
+		NSError *error;
+		if (![manager moveItemAtPath:path toPath:[[path stringByDeletingLastPathComponent] stringByAppendingPathComponent:textField.text] error:&error])
+			NSLog(@"Error: %@", error.localizedDescription);
+	}
+	selectedIndexPath = nil;
+	[self didFinishFetchingImages];
+	[self.tableView reloadData];
+	[textField resignFirstResponder];
+	return YES;
+}
+
+#pragma mark - Other
 
 -(void)dismissViewController {
 	[self dismissViewControllerAnimated:YES completion:^{
 	}];
+}
+
+-(void)presentFetchViewController {
+	FetchViewController *fvc = [self.storyboard instantiateViewControllerWithIdentifier:@"fetchViewController"];
+	fvc.delegate = self;
+//	AFBlurSegue *segue = [AFBlurSegue segueWithIdentifier:@"fetchSegue" source:self destination:fvc performHandler:^{
+//	}];
+//	[self prepareForSegue:segue sender:self];
+//	[self performSegueWithIdentifier:segue.identifier sender:self];
+	[self presentViewController:fvc animated:YES completion:^{
+	}];
+}
+
+-(void)didFinishFetchingImages {
+	NSArray *items = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[self documentsPathForFileName:@""] error:nil];
+	pickerArray = [[NSMutableArray alloc] init];
+	NSString *favItem = @"";
+	for (NSString *item in items) {
+		if (![[item lastPathComponent] containsString:@"."]) {
+			[pickerArray addObject:[self documentsPathForFileName:item]];
+			if ([item containsString:@"Favs"])
+				favItem = [self documentsPathForFileName:item];
+		}
+	}
+	
+	[pickerArray sortUsingSelector:@selector(caseInsensitiveCompare:)];
+	
+	[pickerArray removeObject:favItem];
+	[pickerArray insertObject:favItem atIndex:0];
+	
+	[self.tableView reloadData];
+}
+
+-(void)LongPressCell :(UILongPressGestureRecognizer *)recognizer {
+	CGPoint pointOfContact = [recognizer locationInView:self.tableView];
+	NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:pointOfContact];
+	if (indexPath == nil) {
+		// Long press not on a row...
+	}
+	else if (recognizer.state == UIGestureRecognizerStateBegan) {
+		// Long press recognized on indexPath.row
+		selectedIndexPath = indexPath;
+		[self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+	}
+	else {
+		// Recognizer didn't recognize the gesture
+	}
 }
 
 /*
@@ -164,14 +259,14 @@
 	}
 }
 
-/*
+
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+	if ([segue.identifier isEqualToString:@"fetchSegue"]) {
+		
+	}
 }
-*/
+
 
 @end

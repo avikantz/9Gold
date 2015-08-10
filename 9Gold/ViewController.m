@@ -35,7 +35,9 @@
 	[super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
 	
-	showingFavs = YES;
+	self.view.backgroundColor = [UIColor blackColor];
+	self.tableView.backgroundColor = [UIColor blackColor];
+	self.tableView.backgroundView.backgroundColor = [UIColor clearColor];
 	
 	_tableView.dataSource = self;
 	_tableView.delegate = self;
@@ -50,6 +52,8 @@
 		currentFolderPath = [self documentsPathForFileName:@"Favs/"];
 		self.title = @"9Gold";
 	}
+	
+	showingFavs = ([currentFolderPath containsString:@"Favs"])?YES:NO;
 	
 	NSArray *items = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:currentFolderPath error:nil];
 	_Images = [[NSMutableArray alloc] init];

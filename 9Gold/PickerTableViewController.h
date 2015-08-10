@@ -1,3 +1,4 @@
+
 //
 //  PickerTableViewController.h
 //  9Gold
@@ -7,13 +8,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FetchViewController.h"
 
 @class PickerTableViewController;
 @protocol FolderPickerDelegate <NSObject>
 -(void)didPickFolderWithName:(NSString *)name andPath:(NSString *)path;
 @end
 
-@interface PickerTableViewController : UITableViewController <UIAlertViewDelegate>
+@interface PickerTableViewController : UITableViewController <UIAlertViewDelegate, FetchProtocol, UITextFieldDelegate>
 
 @property (weak, nonatomic) id<FolderPickerDelegate> delegate;
 
