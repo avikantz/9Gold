@@ -57,15 +57,15 @@
 					for (NSInteger i = 0; i < gagImages.count; ++i) {
 						GagImage *gag = [gagImages objectAtIndex:i];
 						NSData *image = nil;
-						image = [NSData dataWithContentsOfURL:[NSURL URLWithString:gag.ImageLargeURL]];
+						image = [NSData dataWithContentsOfURL:[NSURL URLWithString:gag.ImageNormalURL]];
 						if (image)
-							[image writeToFile:[self imagesPathForFileName:[gag.ImageLargeURL lastPathComponent]] atomically:YES];
-						currentlySaving = [NSString stringWithFormat:@"Saving '%@'", [gag.ImageLargeURL lastPathComponent]];
-						savedCount += 1;
+							[image writeToFile:[self imagesPathForFileName:[gag.ImageNormalURL lastPathComponent]] atomically:YES];
+						currentlySaving = [NSString stringWithFormat:@"Saving '%@'", [gag.ImageNormalURL lastPathComponent]];
 						incProgress = [_numberOfItemsField.text integerValue]/savedCount;
 						[self performSelectorOnMainThread:@selector(updateProgressView) withObject:nil waitUntilDone:YES];
 					}
 				}
+				savedCount += 10;
 			}
 		}
 		[self.delegate didFinishFetchingImages];
@@ -84,7 +84,7 @@
 	return string;
 }
 
--(void)touchesBegan:(nonnull NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	[_numberOfItemsField resignFirstResponder];
 	[_startIDField resignFirstResponder];
 	[_pathField resignFirstResponder];

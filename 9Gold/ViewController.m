@@ -154,7 +154,7 @@
 	
 	UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
 	
-	if ([indexPath compare:_selectedIndexPath] == NSOrderedSame || image.size.height < 1080.f)
+	if ([indexPath compare:_selectedIndexPath] == NSOrderedSame || image.size.height < 1440.f)
 		cell = (NineTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"9Cell2" forIndexPath:indexPath];
 	else
 		cell = (NineTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"9Cell" forIndexPath:indexPath];
@@ -179,7 +179,7 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UIImage *image;
 	image = [UIImage imageWithContentsOfFile:[_Images objectAtIndex:indexPath.row]];
-	if ([indexPath compare:_selectedIndexPath] == NSOrderedSame || image.size.height < 1080.f)
+	if ([indexPath compare:_selectedIndexPath] == NSOrderedSame || image.size.height < 1440.f)
 		return (SWidth - (iPad?120:0))*image.size.height/(image.size.width);
 	return 320.f + (iPad?160:0);
 }
