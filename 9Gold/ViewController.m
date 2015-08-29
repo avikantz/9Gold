@@ -16,7 +16,7 @@
 #define SWidth self.view.frame.size.width
 #define SHeight self.view.frame.size.height
 
-@interface ViewController ()
+@interface ViewController () <MCSwipeTableViewCellDelegate>
 
 @end
 
@@ -173,7 +173,52 @@
 	else
 		[cell.favButton setImage:[UIImage imageNamed:@"checkboxEmpty"] forState:UIControlStateNormal];
 	
+	
+	// Configuring the views and colors.
+	UIView *checkView = [self viewWithImageName:@"favs"];
+	UIColor *greenColor = [UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0];
+	
+	UIView *crossView = [self viewWithImageName:@"cross"];
+	UIColor *redColor = [UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0];
+	
+	// Adding gestures per state basis.
+	[cell setSwipeGestureWithView:checkView color:greenColor mode:MCSwipeTableViewCellModeSwitch state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+		NSString *imagePath;
+		NSError *error;
+		if (showingFavs) {
+			imagePath = [_Images objectAtIndex:indexPath.row];
+			[_Images removeObject:imagePath];
+			[_Favs removeObject:[imagePath lastPathComponent]];
+			[[NSFileManager defaultManager] removeItemAtPath:[self documentsPathForFileName:[NSString stringWithFormat:@"Favs/%@", [imagePath lastPathComponent]]] error:&error];
+			[_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+		}
+		else {
+			imagePath = [_Images objectAtIndex:indexPath.row];
+			if ([_Favs containsObject:[imagePath lastPathComponent]]) {
+				[_Favs removeObject:[imagePath lastPathComponent]];
+				[[NSFileManager defaultManager] removeItemAtPath:[self documentsPathForFileName:[NSString stringWithFormat:@"Favs/%@", [imagePath lastPathComponent]]] error:&error];
+			}
+			else {
+				[_Favs addObject:[imagePath lastPathComponent]];
+				[[NSFileManager defaultManager] copyItemAtPath:imagePath toPath:[self documentsPathForFileName:[NSString stringWithFormat:@"Favs/%@", [imagePath lastPathComponent]]] error:&error];
+			}
+			[_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
+		}
+	}];
+	
+	[cell setSwipeGestureWithView:crossView color:redColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
+		[self tableView:tableView commitEditingStyle:UITableViewCellEditingStyleDelete forRowAtIndexPath:indexPath];
+	}];
+	
+	
 	return cell;
+}
+
+- (UIView *)viewWithImageName:(NSString *)imageName {
+	UIImage *image = [UIImage imageNamed:imageName];
+	UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+	imageView.contentMode = UIViewContentModeCenter;
+	return imageView;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

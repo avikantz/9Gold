@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MCSwipeTableViewCell.h"
 
-@interface NineTableViewCell : UITableViewCell
+@interface NineTableViewCell : MCSwipeTableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *nineImageView;
 @property (weak, nonatomic) IBOutlet UIButton *favButton;
