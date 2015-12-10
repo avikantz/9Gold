@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "SSZipArchive.h"
 
+#import "ViewController.h"
+
 @interface AppDelegate ()
 
 @end
@@ -27,7 +29,32 @@
 	
 	[[NSFileManager defaultManager] createDirectoryAtPath:[self documentsPathForFileName:@"Favs/"] withIntermediateDirectories:YES attributes:nil error:nil];
 	
+	UIMutableApplicationShortcutItem *lastVisitedItem = [[UIMutableApplicationShortcutItem alloc]
+													initWithType:@"com.avikantz.listing.last" localizedTitle:@"Last Visited"];
+	[lastVisitedItem setIcon:[UIApplicationShortcutIcon iconWithTemplateImageName:@"checkboxEmpty"]];
+	UIMutableApplicationShortcutItem *allFoldersItem = [[UIMutableApplicationShortcutItem alloc]
+												   initWithType:@"com.avikantz.listing.allfolders" localizedTitle:@"All Folders"];
+	[allFoldersItem setIcon:[UIApplicationShortcutIcon iconWithTemplateImageName:@"folder"]];
+	UIMutableApplicationShortcutItem *favsItem = [[UIMutableApplicationShortcutItem alloc]
+														initWithType:@"com.avikantz.listing.favs" localizedTitle:@"Favourites"];
+	[favsItem setIcon:[UIApplicationShortcutIcon iconWithTemplateImageName:@"heart"]];
+	[application setShortcutItems:[NSArray arrayWithObjects:lastVisitedItem, allFoldersItem, favsItem, nil]];
+	
 	return YES;
+}
+
+-(void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler {
+	UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
+	ViewController *rootvc = [navigationController.viewControllers firstObject];
+	if ([shortcutItem.type containsString:@"last"]) {
+		
+	}
+	else if ([shortcutItem.type containsString:@"allfolders"]) {
+		[rootvc performSegueWithIdentifier:@"picker" sender:nil];
+	}
+	else if ([shortcutItem.type containsString:@"favs"]) {
+		
+	}
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

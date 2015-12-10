@@ -12,6 +12,16 @@
 
 - (void)awakeFromNib {
     // Initialization code
+	self.moviePlayer = [[MPMoviePlayerController alloc] init];
+	self.moviePlayer.controlStyle = MPMovieControlStyleNone;
+	self.moviePlayer.scalingMode = MPMovieScalingModeAspectFit;
+	self.moviePlayer.repeatMode = MPMovieRepeatModeOne;
+	[self.contentView addSubview:self.moviePlayer.view];
+}
+
+-(void)layoutSubviews {
+	[super layoutSubviews];
+	self.moviePlayer.view.frame = CGRectMake(10, 0, self.bounds.size.width - 20, self.bounds.size.height);
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

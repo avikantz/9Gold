@@ -7,13 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MCSwipeTableViewCell.h"
+#import <MediaPlayer/MediaPlayer.h>
 
-@interface NineTableViewCell : MCSwipeTableViewCell
+@interface NineTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *nineImageView;
 @property (weak, nonatomic) IBOutlet UIButton *favButton;
 @property (weak, nonatomic) IBOutlet UIImageView *expandImageView;
 @property (weak, nonatomic) IBOutlet UILabel *expandLabel;
+
+@property (strong, nonatomic) IBOutlet MPMoviePlayerController *moviePlayer;
 
 @end

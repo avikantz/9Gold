@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		59071DD51B689CDF00EB9132 /* TTOpenInAppActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 59071DD41B689CDF00EB9132 /* TTOpenInAppActivity.m */; };
-		592FEF0D1B91DA9000D9411E /* MCSwipeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 592FEF0C1B91DA9000D9411E /* MCSwipeTableViewCell.m */; };
 		5939E1AC1B71316600F29FBD /* FetchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5939E1AB1B71316600F29FBD /* FetchViewController.m */; };
 		5939E1AF1B7134DB00F29FBD /* GagImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5939E1AE1B7134DB00F29FBD /* GagImage.m */; };
 		593B73901B78758A00C61AAB /* PickerEditerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 593B738F1B78758A00C61AAB /* PickerEditerTableViewCell.m */; };
@@ -17,6 +16,7 @@
 		593CC2B51B67F15300A4BCFF /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 593CC2B31B67F15300A4BCFF /* UIImage+ImageEffects.m */; };
 		5950BE091B68D81B0013843A /* footer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5950BE081B68D81B0013843A /* footer.xib */; };
 		5950BE0B1B68DB0D0013843A /* infoFooter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5950BE0A1B68DB0D0013843A /* infoFooter.xib */; };
+		595F3EF51BDF96D500816906 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 595F3EF41BDF96D500816906 /* libz.tbd */; };
 		599C399B1B665210005644F2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 599C399A1B665210005644F2 /* main.m */; };
 		599C399E1B665210005644F2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 599C399D1B665210005644F2 /* AppDelegate.m */; };
 		599C39A11B665210005644F2 /* _Gold.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 599C399F1B665210005644F2 /* _Gold.xcdatamodeld */; };
@@ -31,7 +31,6 @@
 		599C39D31B665FCB005644F2 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 599C39CB1B665FCB005644F2 /* unzip.c */; };
 		599C39D41B665FCB005644F2 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 599C39CD1B665FCB005644F2 /* zip.c */; };
 		599C39D51B665FCB005644F2 /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 599C39D01B665FCB005644F2 /* SSZipArchive.m */; };
-		599C39D71B665FE1005644F2 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 599C39D61B665FE1005644F2 /* libz.dylib */; };
 		599C39D91B666019005644F2 /* Init.zip in Resources */ = {isa = PBXBuildFile; fileRef = 599C39D81B666019005644F2 /* Init.zip */; };
 /* End PBXBuildFile section */
 
@@ -48,8 +47,6 @@
 /* Begin PBXFileReference section */
 		59071DD31B689CDF00EB9132 /* TTOpenInAppActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTOpenInAppActivity.h; sourceTree = "<group>"; };
 		59071DD41B689CDF00EB9132 /* TTOpenInAppActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTOpenInAppActivity.m; sourceTree = "<group>"; };
-		592FEF0B1B91DA9000D9411E /* MCSwipeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSwipeTableViewCell.h; sourceTree = "<group>"; };
-		592FEF0C1B91DA9000D9411E /* MCSwipeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSwipeTableViewCell.m; sourceTree = "<group>"; };
 		5939E1AA1B71316600F29FBD /* FetchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FetchViewController.h; sourceTree = "<group>"; };
 		5939E1AB1B71316600F29FBD /* FetchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FetchViewController.m; sourceTree = "<group>"; };
 		5939E1AD1B7134DB00F29FBD /* GagImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GagImage.h; sourceTree = "<group>"; };
@@ -64,6 +61,7 @@
 		593CC2B31B67F15300A4BCFF /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		5950BE081B68D81B0013843A /* footer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = footer.xib; sourceTree = "<group>"; };
 		5950BE0A1B68DB0D0013843A /* infoFooter.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = infoFooter.xib; sourceTree = "<group>"; };
+		595F3EF41BDF96D500816906 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		599C39951B665210005644F2 /* 9Gold.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 9Gold.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		599C39991B665210005644F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		599C399A1B665210005644F2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -91,7 +89,6 @@
 		599C39CE1B665FCB005644F2 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
 		599C39CF1B665FCB005644F2 /* SSZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipArchive.h; sourceTree = "<group>"; };
 		599C39D01B665FCB005644F2 /* SSZipArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSZipArchive.m; sourceTree = "<group>"; };
-		599C39D61B665FE1005644F2 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		599C39D81B666019005644F2 /* Init.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = Init.zip; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,7 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				599C39D71B665FE1005644F2 /* libz.dylib in Frameworks */,
+				595F3EF51BDF96D500816906 /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,15 +118,6 @@
 				59071DD41B689CDF00EB9132 /* TTOpenInAppActivity.m */,
 			);
 			path = TTOpenInActivity;
-			sourceTree = "<group>";
-		};
-		592FEF0A1B91DA9000D9411E /* MCSwipeTableViewCell */ = {
-			isa = PBXGroup;
-			children = (
-				592FEF0B1B91DA9000D9411E /* MCSwipeTableViewCell.h */,
-				592FEF0C1B91DA9000D9411E /* MCSwipeTableViewCell.m */,
-			);
-			path = MCSwipeTableViewCell;
 			sourceTree = "<group>";
 		};
 		5939E1B01B7134DF00F29FBD /* Model */ = {
@@ -183,7 +171,7 @@
 		599C398C1B665210005644F2 = {
 			isa = PBXGroup;
 			children = (
-				599C39D61B665FE1005644F2 /* libz.dylib */,
+				595F3EF41BDF96D500816906 /* libz.tbd */,
 				599C39971B665210005644F2 /* 9Gold */,
 				599C39B41B665210005644F2 /* 9GoldTests */,
 				599C39961B665210005644F2 /* Products */,
@@ -204,7 +192,6 @@
 			children = (
 				599C399C1B665210005644F2 /* AppDelegate.h */,
 				599C399D1B665210005644F2 /* AppDelegate.m */,
-				592FEF0A1B91DA9000D9411E /* MCSwipeTableViewCell */,
 				5939E1B01B7134DF00F29FBD /* Model */,
 				5950BE0D1B68E0B70013843A /* Controllers */,
 				5950BE0C1B68E0AC0013843A /* Views */,
@@ -385,7 +372,6 @@
 				599C39D41B665FCB005644F2 /* zip.c in Sources */,
 				5939E1AF1B7134DB00F29FBD /* GagImage.m in Sources */,
 				593CC2B41B67F15300A4BCFF /* AFBlurSegue.m in Sources */,
-				592FEF0D1B91DA9000D9411E /* MCSwipeTableViewCell.m in Sources */,
 				59071DD51B689CDF00EB9132 /* TTOpenInAppActivity.m in Sources */,
 				599C39C31B665731005644F2 /* NineTableViewCell.m in Sources */,
 				599C39D21B665FCB005644F2 /* mztools.c in Sources */,

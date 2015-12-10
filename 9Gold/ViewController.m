@@ -16,7 +16,7 @@
 #define SWidth self.view.frame.size.width
 #define SHeight self.view.frame.size.height
 
-@interface ViewController () <MCSwipeTableViewCellDelegate>
+@interface ViewController ()
 
 @end
 
@@ -149,21 +149,37 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	NineTableViewCell *cell = nil;
+	cell = (NineTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"9Cell2" forIndexPath:indexPath];
 	
 	NSString *imagePath = [_Images objectAtIndex:indexPath.row];
-	
-	UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
-	
-	if ([indexPath compare:_selectedIndexPath] == NSOrderedSame || image.size.height < 1440.f)
-		cell = (NineTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"9Cell2" forIndexPath:indexPath];
-	else
-		cell = (NineTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"9Cell" forIndexPath:indexPath];
+	/*
+	if ([imagePath containsString:@".mp4"]) {
+		[cell.nineImageView setImage:nil];
+		[cell.nineImageView setHidden:YES];
+		[cell.moviePlayer setContentURL:[NSURL fileURLWithPath:imagePath]];
+		[cell.moviePlayer prepareToPlay];
+		[cell.moviePlayer.view setHidden:NO];
+		if (cell.moviePlayer.playbackState == MPMoviePlaybackStatePlaying) {
+			[cell.moviePlayer stop];
+			[cell.moviePlayer prepareToPlay];
+		}
+		[cell.moviePlayer play];
+	}
+	else {
+		*/
+//		UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+//		if ([indexPath compare:_selectedIndexPath] == NSOrderedSame || image.size.height < 1440.f)
+//			cell = (NineTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"9Cell2" forIndexPath:indexPath];
+//		else
+//			cell = (NineTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"9Cell2" forIndexPath:indexPath];
+		cell.nineImageView.image = [UIImage imageWithContentsOfFile:imagePath];
+		cell.nineImageView.clipsToBounds = YES;
+		cell.nineImageView.hidden = NO;
+		[cell.moviePlayer.view setHidden:YES];
+//	}
 	
 	if (cell == nil)
 		cell = [tableView dequeueReusableCellWithIdentifier:@"9Cell2" forIndexPath:indexPath];
-	
-	cell.nineImageView.image = [UIImage imageWithContentsOfFile:imagePath];
-	cell.nineImageView.clipsToBounds = YES;
 	
 	favButton = (UIButton *)[cell viewWithTag:1];
 	[favButton addTarget:self action:@selector(tableViewDidClickOnFavsButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -172,44 +188,6 @@
 		[cell.favButton setImage:[UIImage imageNamed:@"favs"] forState:UIControlStateNormal];
 	else
 		[cell.favButton setImage:[UIImage imageNamed:@"checkboxEmpty"] forState:UIControlStateNormal];
-	
-	
-	// Configuring the views and colors.
-	UIView *checkView = [self viewWithImageName:@"favs"];
-	UIColor *greenColor = [UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0];
-	
-	UIView *crossView = [self viewWithImageName:@"cross"];
-	UIColor *redColor = [UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0];
-	
-	// Adding gestures per state basis.
-	[cell setSwipeGestureWithView:checkView color:greenColor mode:MCSwipeTableViewCellModeSwitch state:MCSwipeTableViewCellState1 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
-		NSString *imagePath;
-		NSError *error;
-		if (showingFavs) {
-			imagePath = [_Images objectAtIndex:indexPath.row];
-			[_Images removeObject:imagePath];
-			[_Favs removeObject:[imagePath lastPathComponent]];
-			[[NSFileManager defaultManager] removeItemAtPath:[self documentsPathForFileName:[NSString stringWithFormat:@"Favs/%@", [imagePath lastPathComponent]]] error:&error];
-			[_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-		}
-		else {
-			imagePath = [_Images objectAtIndex:indexPath.row];
-			if ([_Favs containsObject:[imagePath lastPathComponent]]) {
-				[_Favs removeObject:[imagePath lastPathComponent]];
-				[[NSFileManager defaultManager] removeItemAtPath:[self documentsPathForFileName:[NSString stringWithFormat:@"Favs/%@", [imagePath lastPathComponent]]] error:&error];
-			}
-			else {
-				[_Favs addObject:[imagePath lastPathComponent]];
-				[[NSFileManager defaultManager] copyItemAtPath:imagePath toPath:[self documentsPathForFileName:[NSString stringWithFormat:@"Favs/%@", [imagePath lastPathComponent]]] error:&error];
-			}
-			[_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
-		}
-	}];
-	
-	[cell setSwipeGestureWithView:crossView color:redColor mode:MCSwipeTableViewCellModeExit state:MCSwipeTableViewCellState3 completionBlock:^(MCSwipeTableViewCell *cell, MCSwipeTableViewCellState state, MCSwipeTableViewCellMode mode) {
-		[self tableView:tableView commitEditingStyle:UITableViewCellEditingStyleDelete forRowAtIndexPath:indexPath];
-	}];
-	
 	
 	return cell;
 }
@@ -222,14 +200,20 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	UIImage *image;
-	image = [UIImage imageWithContentsOfFile:[_Images objectAtIndex:indexPath.row]];
-	if ([indexPath compare:_selectedIndexPath] == NSOrderedSame || image.size.height < 1440.f)
-		return (SWidth - (iPad?120:0))*image.size.height/(image.size.width);
-	return 320.f + (iPad?160:0);
+	NSString *imagePath = [_Images objectAtIndex:indexPath.row];
+//	if ([imagePath containsString:@".mp4"]) {
+//		return 480.f;
+//	}
+//	else {
+		UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+//		if ([indexPath compare:_selectedIndexPath] == NSOrderedSame || image.size.height < 1440.f)
+			return (SWidth - (iPad?120:0))*image.size.height/(image.size.width);
+//		return 320.f + (iPad?160:0);
+//	}
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	/*
 	[tableView beginUpdates];
 	if (![indexPath compare:_selectedIndexPath] == NSOrderedSame)
 		_selectedIndexPath = indexPath;
@@ -239,6 +223,7 @@
 	[tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 	[tableView endUpdates];
 	[tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+	 */
 }
 
 - (IBAction)tableViewDidClickOnFavsButton:(id)sender {
@@ -271,7 +256,9 @@
 	CGPoint pointOfContact = [recognizer locationInView:self.tableView];
 	NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:pointOfContact];
 	NSString *path = [_Images objectAtIndex:indexPath.row];
-	imageToShare = [UIImage imageWithContentsOfFile:path];
+//	if ([path containsString:@".jpg"]) {
+		imageToShare = [UIImage imageWithContentsOfFile:path];
+//	}
 	urlToShare = [NSURL URLWithString:[NSString stringWithFormat:@"http://9gag.com/gag/%@", [[path lastPathComponent] substringToIndex:7]]];
 	TTOpenInAppActivity *openInAppActivity = [[TTOpenInAppActivity alloc] initWithView:self.view andRect:recognizer.view.frame];
 	if (indexPath == nil) {
@@ -279,8 +266,13 @@
 	}
 	else if (recognizer.state == UIGestureRecognizerStateBegan) {
 		// Long press recognized on indexPath.row
-		UIActivityViewController *ShareAVC = [[UIActivityViewController alloc] initWithActivityItems:
+		UIActivityViewController *ShareAVC;
+//		if ([path containsString:@".jpg"])
+		ShareAVC = [[UIActivityViewController alloc] initWithActivityItems:
 											  @[imageToShare, urlToShare] applicationActivities:@[openInAppActivity]];
+//		else
+//			ShareAVC = [[UIActivityViewController alloc] initWithActivityItems:
+//						@[urlToShare] applicationActivities:@[openInAppActivity]];
 		if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
 			UIPopoverController *popup = [[UIPopoverController alloc] initWithContentViewController:ShareAVC];
 			openInAppActivity.superViewController = popup;
